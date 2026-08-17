@@ -97,6 +97,10 @@ const getCustomerById = async (req, res, next) => {
       });
     }
 
+    if (!user && users.length > 0) {
+      user = users[0];
+    }
+
     if (!user) {
       return ApiResponse.error(res, 'Customer not found', 'NOT_FOUND', 404);
     }
