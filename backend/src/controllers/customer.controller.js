@@ -78,12 +78,14 @@ const getCustomerById = async (req, res, next) => {
     const users = UserModel.getAllUsers();
     const cleanId = id.trim();
 
-    // Find customer by ID, phone, email, or slug
+    // Find customer by ID, customerCode, phone, email, or slug
     const cleanPhone = normalizePhone(cleanId);
     let user = users.find(
       (u) =>
         u.id === cleanId ||
+        u.customerCode === cleanId ||
         String(u.id).toLowerCase() === cleanId.toLowerCase() ||
+        (u.customerCode && u.customerCode.toLowerCase() === cleanId.toLowerCase()) ||
         (cleanPhone && normalizePhone(u.mobile) === cleanPhone) ||
         (u.email && u.email.toLowerCase() === cleanId.toLowerCase())
     );
@@ -93,7 +95,8 @@ const getCustomerById = async (req, res, next) => {
       user = users.find((u) => {
         const uNameClean = (u.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
         const uIdClean = (u.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-        return uNameClean.includes(cleanSlug) || cleanSlug.includes(uNameClean) || uIdClean.includes(cleanSlug);
+        const uCodeClean = (u.customerCode || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        return uNameClean.includes(cleanSlug) || cleanSlug.includes(uNameClean) || uIdClean.includes(cleanSlug) || uCodeClean.includes(cleanSlug);
       });
     }
 
@@ -113,6 +116,7 @@ const getCustomerById = async (req, res, next) => {
     const onlineOrders = allOrders.filter(
       (o) =>
         o.customerId === user.id ||
+        o.customerId === user.customerCode ||
         (cleanUserPhone && normalizePhone(o.mobile) === cleanUserPhone) ||
         (user.email && o.email && o.email.toLowerCase() === user.email.toLowerCase())
     );
@@ -121,6 +125,7 @@ const getCustomerById = async (req, res, next) => {
     const posBills = allPosBills.filter(
       (b) =>
         b.customerId === user.id ||
+        b.customerId === user.customerCode ||
         (cleanUserPhone && normalizePhone(b.mobile) === cleanUserPhone)
     );
 

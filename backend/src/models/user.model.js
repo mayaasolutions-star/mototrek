@@ -28,12 +28,11 @@ class UserModel {
 
   static seedUsers(usersList) {
     USERS_DB = usersList.map((u, idx) => {
-      const formattedId = u.id && u.id.startsWith('MTK-C-') 
-        ? u.id 
-        : `MTK-C-${(idx + 1).toString().padStart(5, '0')}`;
+      const code = u.customerCode || (u.id && u.id.startsWith('MTK-C-') ? u.id : `MTK-C-${(idx + 1).toString().padStart(5, '0')}`);
       return {
         ...u,
-        id: formattedId,
+        id: u.id || code,
+        customerCode: code,
         mobile: normalizePhone(u.mobile),
         source: u.source || 'Website',
         status: u.status || 'Active',
@@ -52,7 +51,16 @@ class UserModel {
   }
 
   static findById(id) {
-    const user = USERS_DB.find((u) => u.id === id || u.id === `usr-${id}` || (u.id && u.id.endsWith(id)));
+    if (!id) return null;
+    const cleanId = String(id).trim();
+    const user = USERS_DB.find(
+      (u) =>
+        u.id === cleanId ||
+        u.customerCode === cleanId ||
+        u.id === `usr-${cleanId}` ||
+        (u.id && u.id.endsWith(cleanId)) ||
+        (u.customerCode && u.customerCode.endsWith(cleanId))
+    );
     if (!user) return null;
     const { passwordHash, ...userWithoutPassword } = user;
     return userWithoutPassword;
