@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+logs/
+*.log
+uploads/*
+!uploads/.gitkeep
+!uploads/products/.gitkeep
+coverage/

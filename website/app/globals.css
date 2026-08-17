@@ -1,0 +1,351 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --forest: #18382a;
+    --forest-dark: #10281e;
+    --forest-light: #24513d;
+
+    --accent: #c45d2a;
+    --accent-hover: #d66b38;
+
+    --cream: #f7f3ec;
+    --sand: #e8dece;
+    --paper: #fffdf8;
+
+    --ink: #1f241f;
+    --muted: #697267;
+
+    --line: rgba(24, 56, 42, .14);
+
+    --radius: 14px;
+
+    --shadow: 0 18px 45px rgba(22, 40, 30, .08);
+
+    --transition: .3s ease;
+}
+
+/* ---------- RESET & BASE ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* ---------- TYPOGRAPHY ---------- */
+
+.serif {
+    font-family: "Libre Baskerville", serif;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+button {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+
+.focus-ring:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+::selection {
+    background: var(--forest);
+    color: #fff;
+}
+
+/* ---------- MOBILE NAV ---------- */
+
+.nav-drawer {
+    display: none;
+}
+
+.nav-drawer.open {
+    display: block;
+}
+
+/* ---------- HERO ---------- */
+
+.hero {
+    position: relative;
+    min-height: 720px;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(10, 20, 16, .88) 0%,
+        rgba(10, 20, 16, .60) 45%,
+        rgba(10, 20, 16, .18) 100%
+    );
+}
+
+.hero-overlay {
+    background: linear-gradient(90deg, rgba(16, 40, 30, .94) 0%, rgba(16, 40, 30, .72) 48%, rgba(16, 40, 30, .24) 100%);
+}
+
+.hero img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+@media(max-width: 768px) {
+    .hero img {
+        object-position: 65% center;
+    }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- IMAGE CARDS ---------- */
+
+.image-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+}
+
+.image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .6s ease;
+}
+
+.image-card:hover img {
+    transform: scale(1.05);
+}
+
+.category-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(0, 0, 0, .05) 20%,
+        rgba(0, 0, 0, .60) 100%
+    );
+
+    transition: var(--transition);
+}
+
+.category-card:hover::after {
+    background:
+    linear-gradient(
+        180deg,
+        rgba(0, 0, 0, .05) 20%,
+        rgba(0, 0, 0, .75) 100%
+    );
+}
+
+.category-card > *:not(img) {
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- SHOP & PRODUCT CARDS ---------- */
+
+.product-card img {
+    transition: transform .65s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.035);
+}
+
+.product-card .image-wrap {
+    overflow: hidden;
+    background: #eee6d9;
+}
+
+.filter-chip.active {
+    background: var(--forest);
+    color: white;
+    border-color: var(--forest);
+}
+
+.saved svg {
+    fill: var(--forest);
+    color: var(--forest);
+}
+
+/* ---------- CARDS ---------- */
+
+.soft-shadow {
+    box-shadow: var(--shadow);
+}
+
+/* ---------- FORMS ---------- */
+
+input,
+select,
+textarea {
+    outline: none;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: var(--transition);
+    background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--forest);
+    box-shadow: 0 0 0 3px rgba(24, 56, 42, .08);
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* ---------- BUTTONS ---------- */
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* ---------- LINKS ---------- */
+
+a:hover {
+    transition: var(--transition);
+}
+
+/* ---------- RECOMMENDATION ---------- */
+
+.recommendations {
+    display: none;
+}
+
+.recommendations.show {
+    display: block;
+    animation: fadeUp .45s ease;
+}
+
+/* ---------- ANIMATION ---------- */
+
+.fade-up {
+    animation: fadeUp .8s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- SCROLLBAR ---------- */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--forest);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1024px) {
+    .hero {
+        min-height: 620px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 520px;
+    }
+
+    h1 {
+        line-height: 1.1;
+    }
+
+    h2 {
+        line-height: 1.2;
+    }
+
+    section {
+        scroll-margin-top: 80px;
+    }
+
+    p {
+        line-height: 1.7;
+    }
+
+    .serif {
+        letter-spacing: -0.02em;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 460px;
+    }
+}

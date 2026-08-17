@@ -1,0 +1,17 @@
+{
+  "name": "mototrek-admin",
+  "version": "1.0.0",
+  "description": "Mototrek Internal Admin & Inventory Management Dashboard",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Admin dashboard dev server placeholder\" && exit 0",
+    "build": "echo \"Admin dashboard build placeholder\" && exit 0"
+  },
+  "keywords": [
+    "mototrek",
+    "admin",
+    "dashboard"
+  ],
+  "author": "Mototrek",
+  "license": "ISC"
+}

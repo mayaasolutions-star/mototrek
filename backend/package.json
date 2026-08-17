@@ -1,0 +1,31 @@
+{
+  "name": "mototrek-backend",
+  "version": "1.0.0",
+  "description": "Mototrek Ecommerce Platform Custom REST API Server",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/*.test.js",
+    "seed:demo": "node src/seed.js",
+    "reset:demo": "node src/seed.js"
+  },
+  "keywords": [
+    "mototrek",
+    "ecommerce",
+    "express",
+    "postgres",
+    "rest-api"
+  ],
+  "author": "Mototrek",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.0",
+    "helmet": "^7.1.0",
+    "pg": "^8.12.0"
+  }
+}

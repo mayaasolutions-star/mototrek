@@ -1,0 +1,27 @@
+{
+  "name": "mototrek-platform",
+  "version": "1.0.0",
+  "description": "Mototrek Ecommerce Platform Root Workspace",
+  "private": true,
+  "workspaces": [
+    "website",
+    "admin",
+    "backend"
+  ],
+  "scripts": {
+    "website:dev": "npm run dev --workspace=website",
+    "website:build": "npm run build --workspace=website",
+    "website:start": "npm run start --workspace=website",
+    "backend:dev": "npm run dev --workspace=backend",
+    "backend:start": "npm run start --workspace=backend",
+    "admin:dev": "npm run dev --workspace=admin",
+    "admin:build": "npm run build --workspace=admin"
+  },
+  "keywords": [
+    "mototrek",
+    "ecommerce",
+    "riding-gear"
+  ],
+  "author": "Mototrek",
+  "license": "ISC"
+}
