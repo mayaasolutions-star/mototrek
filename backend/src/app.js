@@ -11,6 +11,10 @@ const { securityHeaders, limiter } = require('./middleware/security.middleware')
 const requestLogger = require('./middleware/requestLogger.middleware');
 const { notFoundHandler, errorHandler } = require('./middleware/error.middleware');
 const routes = require('./routes');
+const { seedDemoData } = require('./seed');
+
+// Seed relational demo data upon module load
+seedDemoData();
 
 const app = express();
 
