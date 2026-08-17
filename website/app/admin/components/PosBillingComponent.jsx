@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../../utils/api";
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   Receipt,
@@ -293,7 +294,7 @@ export default function PosBillingComponent({
       address: "Walk-in Store Rider",
     };
 
-    fetch("http://localhost:5000/api/v1/customers", {
+    fetch("${API_BASE}/customers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -432,7 +433,7 @@ export default function PosBillingComponent({
       staffName: "Pratik M. (Store Manager)",
     };
 
-    fetch("http://localhost:5000/api/v1/pos", {
+    fetch("${API_BASE}/pos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

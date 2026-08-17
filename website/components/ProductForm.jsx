@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../utils/api";
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
@@ -289,7 +290,7 @@ function SharedProductFormContent({ initialMode = "create", initialProductId = n
   // EDIT MODE: FETCH AND PRE-FILL PRODUCT DATA
   useEffect(() => {
     if (isEdit && targetProductId) {
-      fetch(`http://localhost:5000/api/v1/products/admin/id/${targetProductId}`)
+      fetch(`${API_BASE}/products/admin/id/${targetProductId}`)
         .then((res) => res.json())
         .then((json) => {
           if (json.success && json.data) {
@@ -760,8 +761,8 @@ function SharedProductFormContent({ initialMode = "create", initialProductId = n
     };
 
     const targetUrl = isEdit && targetProductId
-      ? `http://localhost:5000/api/v1/products/${targetProductId}`
-      : `http://localhost:5000/api/v1/products`;
+      ? `${API_BASE}/products/${targetProductId}`
+      : `${API_BASE}/products`;
 
     const targetMethod = isEdit && targetProductId ? "PUT" : "POST";
 

@@ -1,6 +1,9 @@
 "use client";
 
+import API_BASE from "../../../utils/api";
 import React, { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Users,
   Search,
@@ -50,7 +53,7 @@ export default function CustomerDirectoryComponent({
   // FETCH DETAILED CUSTOMER PROFILE
   const fetchCustomerProfile = (id) => {
     setLoadingDetail(true);
-    fetch(`http://localhost:5000/api/v1/customers/${encodeURIComponent(id)}`)
+    fetch(`${API_BASE}/customers/${encodeURIComponent(id)}`)
       .then((res) => res.json())
       .then((json) => {
         setLoadingDetail(false);
@@ -282,16 +285,13 @@ export default function CustomerDirectoryComponent({
                         </span>
                       </td>
                       <td className="p-3.5 text-center">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            fetchCustomerProfile(cust.id);
-                          }}
-                          className="px-3 py-1 bg-[#18382a] text-white rounded-lg font-bold hover:bg-[#234e3b] transition text-[11px]"
+                        <Link
+                          href={`/admin/customers/${encodeURIComponent(cust.id)}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="px-3 py-1 bg-[#18382a] text-white rounded-lg font-bold hover:bg-[#234e3b] transition text-[11px] inline-block"
                         >
                           View Profile
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   ))

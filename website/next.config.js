@@ -1,4 +1,5 @@
-/** @type {import('next').NextConfig} */
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || 'http://127.0.0.1:5000';
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -8,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: '/api/v1/:path*',
-        destination: 'http://127.0.0.1:5000/api/v1/:path*',
+        destination: `${BACKEND_URL.replace(/\/$/, '')}/api/v1/:path*`,
       },
     ];
   },

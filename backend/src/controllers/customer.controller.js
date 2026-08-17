@@ -78,14 +78,24 @@ const getCustomerById = async (req, res, next) => {
     const users = UserModel.getAllUsers();
     const cleanId = id.trim();
 
-    // Find customer by ID, phone, or email
+    // Find customer by ID, phone, email, or slug
     const cleanPhone = normalizePhone(cleanId);
-    const user = users.find(
+    let user = users.find(
       (u) =>
         u.id === cleanId ||
+        String(u.id).toLowerCase() === cleanId.toLowerCase() ||
         (cleanPhone && normalizePhone(u.mobile) === cleanPhone) ||
         (u.email && u.email.toLowerCase() === cleanId.toLowerCase())
     );
+
+    if (!user) {
+      const cleanSlug = cleanId.toLowerCase().replace(/[^a-z0-9]/g, "");
+      user = users.find((u) => {
+        const uNameClean = (u.name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const uIdClean = (u.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        return uNameClean.includes(cleanSlug) || cleanSlug.includes(uNameClean) || uIdClean.includes(cleanSlug);
+      });
+    }
 
     if (!user) {
       return ApiResponse.error(res, 'Customer not found', 'NOT_FOUND', 404);

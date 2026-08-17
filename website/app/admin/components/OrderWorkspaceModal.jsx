@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../../utils/api";
 import React, { useState, useEffect } from "react";
 import {
   X,
@@ -149,7 +150,7 @@ export default function OrderWorkspaceModal({ order: initialOrder, onClose, onSt
   // PERSIST ORDER UPDATES TO BACKEND API & STATE
   const persistOrderUpdate = async (updates, adminName = "Admin", userNote = "") => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/orders/${encodeURIComponent(order.id)}`, {
+      const response = await fetch(`${API_BASE}/orders/${encodeURIComponent(order.id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...updates, adminName, deliveryNote: userNote }),

@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../../utils/api";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -32,7 +33,7 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/products/detail/${slug}`)
+    fetch(`${API_BASE}/products/detail/${slug}`)
       .then((res) => res.json())
       .then((json) => {
         if (json.success && json.data) {

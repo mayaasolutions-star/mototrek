@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../utils/api";
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -22,7 +23,7 @@ function ShopContent() {
 
   // Fetch live products from backend REST API
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/products?status=Active&visibility=Visible&sort=newest")
+    fetch("${API_BASE}/products?status=Active&visibility=Visible&sort=newest")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {

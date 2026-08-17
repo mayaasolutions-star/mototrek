@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../../../utils/api";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -26,6 +27,8 @@ import {
   Clock,
   Check,
   ChevronDown,
+  AlertCircle,
+  ShieldAlert,
 } from "lucide-react";
 
 export default function OrderDetailsPage() {
@@ -111,35 +114,50 @@ export default function OrderDetailsPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const [errorType, setErrorType] = useState("generic"); // "connection" | "not_found" | "auth" | "generic"
+
   // FETCH ORDER DATA
-  useEffect(() => {
+  const fetchOrder = async () => {
     if (!orderId) return;
+    setLoading(true);
+    setError("");
 
-    async function fetchOrder() {
-      setLoading(true);
-      try {
-        const res = await fetch(`http://localhost:5000/api/v1/orders/${encodeURIComponent(orderId)}`);
-        const json = await res.json();
-
-        if (json.success && json.data) {
-          setOrder(json.data);
-          setSelectedOverrideStatus(json.data.orderStatus || "Order Placed");
-          setDeliveryStatusChoice(json.data.orderStatus || "Shipped");
-          setCourierInput(json.data.courier || "BlueDart Express");
-          setAwbInput(json.data.awb || json.data.tracking || "BD94810234IN");
-          setShippingDateInput(json.data.shippingDate || "");
-          setExpectedDeliveryInput(json.data.expectedDelivery || "");
-        } else {
-          setError("Order not found");
-        }
-      } catch (err) {
-        console.error("Failed to fetch order:", err);
-        setError("Unable to connect to server");
-      } finally {
-        setLoading(false);
+    try {
+      const res = await fetch(`${API_BASE}/orders/${encodeURIComponent(orderId)}`);
+      if (res.status === 401 || res.status === 403) {
+        setErrorType("auth");
+        setError("Your session has expired. Please sign in again.");
+        return;
       }
-    }
+      if (res.status === 404) {
+        setErrorType("not_found");
+        setError("Order not found.");
+        return;
+      }
 
+      const json = await res.json();
+      if (json.success && json.data) {
+        setOrder(json.data);
+        setSelectedOverrideStatus(json.data.orderStatus || "Order Placed");
+        setDeliveryStatusChoice(json.data.orderStatus || "Shipped");
+        setCourierInput(json.data.courier || "BlueDart Express");
+        setAwbInput(json.data.awb || json.data.tracking || "BD94810234IN");
+        setShippingDateInput(json.data.shippingDate || "");
+        setExpectedDeliveryInput(json.data.expectedDelivery || "");
+      } else {
+        setErrorType("not_found");
+        setError(json.message || "Order not found.");
+      }
+    } catch (err) {
+      console.error("Failed to fetch order:", err);
+      setErrorType("connection");
+      setError("Unable to connect to the Mototrek server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchOrder();
   }, [orderId]);
 
@@ -148,7 +166,7 @@ export default function OrderDetailsPage() {
       <div className="min-h-screen bg-[#f7f3ec] p-8 flex items-center justify-center">
         <div className="text-center space-y-3">
           <div className="w-8 h-8 border-4 border-[#18382a] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="font-bold text-xs text-[#18382a]">Loading Order #{orderId}...</p>
+          <p className="font-bold text-xs text-[#18382a]">Loading order details for #{orderId}...</p>
         </div>
       </div>
     );
@@ -158,13 +176,40 @@ export default function OrderDetailsPage() {
     return (
       <div className="min-h-screen bg-[#f7f3ec] p-8 flex items-center justify-center">
         <div className="bg-white p-6 rounded-2xl border max-w-md w-full text-center space-y-4 shadow-sm">
-          <p className="font-bold text-base text-red-700">{error || "Order Not Found"}</p>
-          <Link
-            href="/admin"
-            className="inline-block px-4 py-2 bg-[#18382a] text-white rounded-xl text-xs font-bold hover:bg-[#234e3b] transition"
-          >
-            ← Back to Admin Orders
-          </Link>
+          <div className="w-12 h-12 rounded-full bg-red-100 text-red-700 flex items-center justify-center mx-auto">
+            {errorType === "auth" ? <ShieldAlert className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
+          </div>
+          <div className="space-y-1">
+            <h2 className="font-bold text-base text-gray-900">
+              {errorType === "connection"
+                ? "Unable to connect to the Mototrek server."
+                : errorType === "auth"
+                ? "Your session has expired. Please sign in again."
+                : errorType === "not_found"
+                ? "Order not found."
+                : "Something went wrong while loading this order."}
+            </h2>
+            <p className="text-xs text-gray-500 font-medium">
+              {error || "Please verify the order ID or backend connection."}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-2 pt-2">
+            <button
+              type="button"
+              onClick={fetchOrder}
+              className="px-4 py-2 bg-[#18382a] text-white rounded-xl text-xs font-bold hover:bg-[#234e3b] transition flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Retry</span>
+            </button>
+            <Link
+              href="/admin"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-100 transition"
+            >
+              ← Back to Orders
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -236,7 +281,7 @@ export default function OrderDetailsPage() {
 
     try {
       const previousStatus = order.orderStatus;
-      const response = await fetch(`http://localhost:5000/api/v1/orders/${encodeURIComponent(order.id)}`, {
+      const response = await fetch(`${API_BASE}/orders/${encodeURIComponent(order.id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...updates, adminName, deliveryNote: userNote }),

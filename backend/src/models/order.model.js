@@ -107,7 +107,13 @@ class OrderModel {
   }
 
   static async findById(id) {
-    return ORDERS_DB.find((o) => o.id === id) || null;
+    if (!id) return null;
+    const cleanId = String(id).trim();
+    let order = ORDERS_DB.find((o) => o.id === cleanId || String(o.id).toLowerCase() === cleanId.toLowerCase());
+    if (!order) {
+      order = ORDERS_DB.find((o) => o.id.toLowerCase().includes(cleanId.toLowerCase()) || cleanId.toLowerCase().includes(o.id.toLowerCase())) || null;
+    }
+    return order;
   }
 
   static async findAll({ customerId, status } = {}) {

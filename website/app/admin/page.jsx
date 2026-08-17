@@ -1,5 +1,6 @@
 "use client";
 
+import API_BASE from "../../utils/api";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import PosBillingComponent from "./components/PosBillingComponent";
@@ -175,7 +176,7 @@ export default function AdminDashboardPage() {
 
   // Fetch Dashboard Metrics by Date Range
   const fetchDashboardMetrics = (range = dateRange) => {
-    fetch(`http://localhost:5000/api/v1/analytics/dashboard?range=${range}`)
+    fetch(`${API_BASE}/analytics/dashboard?range=${range}`)
       .then((res) => res.json())
       .then((json) => {
         if (json.success && json.data) {
@@ -193,7 +194,7 @@ export default function AdminDashboardPage() {
 
   // Fetch All Admin Domain Data
   const fetchAllAdminData = () => {
-    fetch("http://localhost:5000/api/v1/products/admin/all")
+    fetch("${API_BASE}/products/admin/all")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -215,7 +216,7 @@ export default function AdminDashboardPage() {
         setProductsList(demoAdminData.products);
       });
 
-    fetch("http://localhost:5000/api/v1/orders")
+    fetch("${API_BASE}/orders")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -230,7 +231,7 @@ export default function AdminDashboardPage() {
         setOrdersList(demoAdminData.orders);
       });
 
-    fetch("http://localhost:5000/api/v1/customers")
+    fetch("${API_BASE}/customers")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -245,7 +246,7 @@ export default function AdminDashboardPage() {
         setCustomersList(demoAdminData.customers);
       });
 
-    fetch("http://localhost:5000/api/v1/coupons")
+    fetch("${API_BASE}/coupons")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -260,7 +261,7 @@ export default function AdminDashboardPage() {
         setCouponsList(demoAdminData.coupons);
       });
 
-    fetch("http://localhost:5000/api/v1/pos")
+    fetch("${API_BASE}/pos")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -275,7 +276,7 @@ export default function AdminDashboardPage() {
         setPosBillsList(demoAdminData.posBills);
       });
 
-    fetch("http://localhost:5000/api/v1/suppliers")
+    fetch("${API_BASE}/suppliers")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -293,7 +294,7 @@ export default function AdminDashboardPage() {
         setSuppliersList(demoAdminData.suppliers);
       });
 
-    fetch("http://localhost:5000/api/v1/purchases")
+    fetch("${API_BASE}/purchases")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && Array.isArray(json.data)) {
@@ -308,7 +309,7 @@ export default function AdminDashboardPage() {
         setPurchaseOrdersList(demoAdminData.purchaseOrders);
       });
 
-    fetch("http://localhost:5000/api/v1/accounts")
+    fetch("${API_BASE}/accounts")
       .then((res) => res.json())
       .then((json) => {
         if (json.success && json.data) {
@@ -338,7 +339,7 @@ export default function AdminDashboardPage() {
   };
 
   const handleOrderStatusChange = (orderId, newStatus) => {
-    fetch(`http://localhost:5000/api/v1/orders/${orderId}/status`, {
+    fetch(`${API_BASE}/orders/${orderId}/status`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
@@ -357,7 +358,7 @@ export default function AdminDashboardPage() {
   };
 
   const handleDuplicateProduct = (prodId) => {
-    fetch(`http://localhost:5000/api/v1/products/${prodId}/duplicate`, {
+    fetch(`${API_BASE}/products/${prodId}/duplicate`, {
       method: "POST",
     })
       .then((res) => res.json())
@@ -371,7 +372,7 @@ export default function AdminDashboardPage() {
 
   const handleAdjustStockSubmit = () => {
     if (!stockModalVariant) return;
-    fetch("http://localhost:5000/api/v1/products/inventory/adjust", {
+    fetch("${API_BASE}/products/inventory/adjust", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -393,7 +394,7 @@ export default function AdminDashboardPage() {
 
   // PURCHASES: RECEIVE STOCK SUBMIT
   const handleReceivePo = (poId) => {
-    fetch(`http://localhost:5000/api/v1/purchases/${poId}/receive`, {
+    fetch(`${API_BASE}/purchases/${poId}/receive`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ adminName: "Pratik M. (Store Manager)" }),
@@ -424,7 +425,7 @@ export default function AdminDashboardPage() {
       notes: poNotes,
     };
 
-    fetch("http://localhost:5000/api/v1/purchases", {
+    fetch("${API_BASE}/purchases", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -452,7 +453,7 @@ export default function AdminDashboardPage() {
       gstin: newSupGstin,
     };
 
-    fetch("http://localhost:5000/api/v1/suppliers", {
+    fetch("${API_BASE}/suppliers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -478,7 +479,7 @@ export default function AdminDashboardPage() {
       paymentMethod: expPaymentMethod,
     };
 
-    fetch("http://localhost:5000/api/v1/accounts/expenses", {
+    fetch("${API_BASE}/accounts/expenses", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

@@ -31,6 +31,28 @@ const seedDemoData = () => {
   // 1. DEMO USERS (12 Customers)
   const demoUsers = [
     {
+      id: 'cust-amit-kulkarni',
+      name: 'Amit Kulkarni',
+      email: 'amit.kulkarni@gmail.com',
+      mobile: '9876543210',
+      passwordHash: hashPassword('Rider@2026'),
+      createdAt: daysAgo(60),
+      addresses: [
+        {
+          id: 'addr-amit',
+          name: 'Amit Kulkarni',
+          mobile: '9876543210',
+          house: 'Flat 102, Shanti Heights',
+          street: 'FC Road',
+          city: 'Pune',
+          state: 'Maharashtra',
+          pincode: '411004',
+          type: 'Home',
+          isDefault: true,
+        },
+      ],
+    },
+    {
       id: 'usr-101',
       name: 'Rahul Sharma',
       email: 'rahul.s@gmail.com',
@@ -938,6 +960,39 @@ const seedDemoData = () => {
 
   // 4. DEMO ORDERS (16 Relational Orders MTK-1001 to MTK-1016)
   const demoOrders = [
+    {
+      id: 'MT-2026-1048',
+      customerId: 'cust-amit-kulkarni',
+      customerName: 'Amit Kulkarni',
+      email: 'amit.kulkarni@gmail.com',
+      mobile: '9876543210',
+      shippingAddress: {
+        name: 'Amit Kulkarni',
+        mobile: '9876543210',
+        house: 'Flat 102, Shanti Heights',
+        street: 'FC Road',
+        city: 'Pune',
+        state: 'Maharashtra',
+        pincode: '411004',
+      },
+      items: [
+        { productId: 'prod-101', name: 'Raida Airwave Riding Jacket', brand: 'Raida', colour: 'Black', size: 'L', sku: 'MT-JKT-RAI-001', price: 4499, quantity: 1 },
+        { productId: 'prod-104', name: 'Viaterra Claw Riding Gloves', brand: 'Viaterra', colour: 'Black', size: 'M', sku: 'MT-GLV-VIA-014', price: 1899, quantity: 1 }
+      ],
+      subtotal: 6398,
+      discount: 0,
+      shippingFee: 0,
+      grandTotal: 6398,
+      paymentMethod: 'Razorpay (UPI)',
+      paymentStatus: 'Paid',
+      orderStatus: 'Processing',
+      createdAt: daysAgo(2),
+      statusHistory: [
+        { status: 'Order Placed', timestamp: daysAgo(2) },
+        { status: 'Order Confirmed', timestamp: daysAgo(2, 11, 0) },
+        { status: 'Processing', timestamp: daysAgo(1, 10, 0) }
+      ]
+    },
     {
       id: 'MTK-1001',
       customerId: 'usr-101',
